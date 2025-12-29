@@ -1,0 +1,46 @@
+[
+  {
+    "name": "Rohan kumar",
+    "rating": 5,
+    "message": "I had a great experience with the clinic. The doctor listened carefully, explained everything clearly, and the treatment really helped me. Staff was supportive and caring. Highly recommended.”",
+    "id": "2f210146-ffaa-4051-b9d1-a3ade7b0cc8e",
+    "status": "pending",
+    "createdAt": "2025-12-29T11:27:57.469Z",
+    "updatedAt": "2025-12-29T11:27:57.469Z",
+    "create_at": "2025-12-29T11:27:57.469Z",
+    "update_at": "2025-12-29T11:27:57.469Z"
+  },
+  {
+    "name": "Amit mishra",
+    "rating": 5,
+    "message": "The hospital environment is clean and well-managed. The doctors are knowledgeable and the team is very helpful. I felt comfortable throughout my treatment.”",
+    "id": "41340f33-1071-4beb-a74a-1bd9df2326e2",
+    "status": "pending",
+    "createdAt": "2025-12-29T11:28:30.377Z",
+    "updatedAt": "2025-12-29T11:28:30.377Z",
+    "create_at": "2025-12-29T11:28:30.377Z",
+    "update_at": "2025-12-29T11:28:30.377Z"
+  },
+  {
+    "name": "Mohit aggarwal",
+    "rating": 5,
+    "message": "“I was really nervous about my condition, but the doctor treated me with patience and kindness. Thanks to the treatment, I’m recovering well. I’m truly grateful.”",
+    "id": "e9605cb0-483d-4b11-901b-88618f9120f0",
+    "status": "pending",
+    "createdAt": "2025-12-29T11:47:29.552Z",
+    "updatedAt": "2025-12-29T11:47:29.552Z",
+    "create_at": "2025-12-29T11:47:29.552Z",
+    "update_at": "2025-12-29T11:47:29.552Z"
+  },
+  {
+    "name": "Md Aatif",
+    "rating": 5,
+    "message": "“Good experience, caring staff and well-experienced doctor. Very satisfied with the treatment.”",
+    "id": "d733615e-9d14-463f-9126-57b89f83d9f8",
+    "status": "pending",
+    "createdAt": "2025-12-29T11:48:10.751Z",
+    "updatedAt": "2025-12-29T11:48:10.751Z",
+    "create_at": "2025-12-29T11:48:10.751Z",
+    "update_at": "2025-12-29T11:48:10.751Z"
+  }
+]
