@@ -12,6 +12,10 @@ const { errorHandler } = require('./middlewares/errorHandler');
 
 const app = express();
 
+app.set('etag', false);
+app.set('trust proxy', 1);
+
+const isDev = String(process.env.NODE_ENV || '').toLowerCase() !== 'production';
 const corsOrigins = (process.env.CORS_ORIGINS || 'http://localhost:3000,http://127.0.0.1:3000')
   .split(',')
   .map((s) => s.trim())
@@ -19,7 +23,13 @@ const corsOrigins = (process.env.CORS_ORIGINS || 'http://localhost:3000,http://1
 
 app.use(
   cors({
-    origin: corsOrigins.length ? corsOrigins : true,
+    origin: (origin, cb) => {
+      if (!origin) return cb(null, true);
+      if (isDev) return cb(null, true);
+      if (!corsOrigins.length) return cb(null, true);
+      if (corsOrigins.includes(origin)) return cb(null, true);
+      return cb(new Error('Not allowed by CORS'));
+    },
     credentials: true,
   })
 );
@@ -36,6 +46,16 @@ app.use(
     legacyHeaders: false,
   })
 );
+
+app.get('/', (req, res) => {
+  res.json({ ok: true, message: 'Server is running' });
+});
+
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  res.set('Pragma', 'no-cache');
+  next();
+});
 
 app.use('/api', routes);
 

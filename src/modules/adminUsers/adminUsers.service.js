@@ -1,9 +1,6 @@
-const path = require('path');
 const crypto = require('crypto');
 
-const { readJsonArray, writeJsonArray } = require('../../utils/fileStore');
-
-const filePath = path.join(__dirname, '..', '..', 'data', 'adminUsers.json');
+const AdminUser = require('../../models/AdminUser');
 
 function normalizeEmail(email) {
   return String(email || '').trim().toLowerCase();
@@ -23,21 +20,19 @@ function toPublic(user) {
 }
 
 async function list() {
-  const items = await readJsonArray(filePath);
+  const items = await AdminUser.find({}).lean();
   return items.map(toPublic);
 }
 
 async function getById(id) {
-  const items = await readJsonArray(filePath);
-  const found = items.find((u) => u && u.id === id);
+  const found = await AdminUser.findOne({ id }).lean();
   return found ? toPublic(found) : undefined;
 }
 
 async function create(payload) {
-  const items = await readJsonArray(filePath);
-
   const email = normalizeEmail(payload.email);
-  const exists = items.some((u) => normalizeEmail(u && u.email) === email);
+
+  const exists = await AdminUser.exists({ email });
   if (exists) {
     const err = new Error('Email already exists');
     err.statusCode = 409;
@@ -57,25 +52,23 @@ async function create(payload) {
     update_at: now,
   };
 
-  await writeJsonArray(filePath, [...items, user]);
+  await AdminUser.create(user);
   return toPublic(user);
 }
 
 async function patchById(id, patch) {
-  const items = await readJsonArray(filePath);
-  const idx = items.findIndex((u) => u && u.id === id);
-  if (idx < 0) {
+  const current = await AdminUser.findOne({ id }).lean();
+  if (!current) {
     const err = new Error('Admin user not found');
     err.statusCode = 404;
     throw err;
   }
 
-  const current = items[idx];
-
   if (typeof patch.email !== 'undefined') {
     const nextEmail = normalizeEmail(patch.email);
-    const exists = items.some((u) => u && u.id !== id && normalizeEmail(u.email) === nextEmail);
-    if (exists) {
+
+    const emailExists = await AdminUser.exists({ id: { $ne: id }, email: nextEmail });
+    if (emailExists) {
       const err = new Error('Email already exists');
       err.statusCode = 409;
       throw err;
@@ -91,24 +84,18 @@ async function patchById(id, patch) {
     update_at: now,
   };
 
-  const nextItems = [...items];
-  nextItems[idx] = next;
-  await writeJsonArray(filePath, nextItems);
-  return toPublic(next);
+  const saved = await AdminUser.findOneAndUpdate({ id }, { $set: next }, { new: true, lean: true });
+  return saved ? toPublic(saved) : toPublic(next);
 }
 
 async function deleteById(id) {
-  const items = await readJsonArray(filePath);
-  const idx = items.findIndex((u) => u && u.id === id);
-  if (idx < 0) {
+  const removed = await AdminUser.findOneAndDelete({ id }).lean();
+  if (!removed) {
     const err = new Error('Admin user not found');
     err.statusCode = 404;
     throw err;
   }
 
-  const removed = items[idx];
-  const nextItems = items.filter((u) => u && u.id !== id);
-  await writeJsonArray(filePath, nextItems);
   return toPublic(removed);
 }
 

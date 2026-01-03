@@ -1,7 +1,6 @@
 const { ContactSchema } = require('./contact.validator');
 const { ContactInquiryCreateSchema, ContactInquiryPatchSchema } = require('./inquiries.validator');
 const contactService = require('./contact.service');
-const notificationService = require('../../services/notificationService');
 
 async function createContact(req, res, next) {
   try {
@@ -18,14 +17,6 @@ async function createContact(req, res, next) {
       ...parsed.data,
       source: 'ask_the_doctor',
     });
-
-    if (notificationService && typeof notificationService.notifyNewInquiry === 'function') {
-      notificationService.notifyNewInquiry(saved).catch((err) => {
-        if (process.env.NODE_ENV !== 'production') {
-          console.error('notifyNewInquiry failed', err);
-        }
-      });
-    }
 
     return res.status(201).json({
       ok: true,

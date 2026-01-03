@@ -11,7 +11,7 @@ const ClinicProfileUpsertSchema = z.object({
   whatsappNumber: z.string().trim().min(7).max(30).optional().or(z.literal('')),
   addressText: z.string().trim().min(3).max(500),
   hoursText: z.string().trim().min(3).max(500),
-  googleMapsUrl: z.string().trim().max(500).optional().or(z.literal('')),
+  googleMapsUrl: z.string().trim().max(5000).optional().or(z.literal('')),
 });
 
 const ClinicProfilePatchSchema = ClinicProfileUpsertSchema.partial();

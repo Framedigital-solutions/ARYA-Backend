@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2025-12-29T00:00:00.000Z",
+  "updatedAt": "2026-01-03T10:25:18.069Z",
   "hero": {
     "titleLines": [
       "Restoring",
@@ -46,7 +46,7 @@
       "info@aryahomoeohall.com",
       "appointments@aryahomoeohall.com"
     ],
-    "addressText": "123 Heritage Lane, Old City, Mumbai 400001",
+    "addressText": "Petrol Pump Dharmkata Se Purab, Khatuaha Chowk ,Bihar 848117",
     "address": {
       "line1": "123 Heritage Lane",
       "line2": "Old City, Mumbai 400001",
@@ -54,7 +54,7 @@
       "state": "MH",
       "pincode": "400001",
       "country": "IN",
-      "googleMapsUrl": ""
+      "googleMapsUrl": "https://www.google.com/maps/place/Arya+Homeo+Hall/@25.8728227,85.9195991"
     },
     "hoursText": "Mon-Sat: 9:00 AM - 7:00 PM | Sunday: 10:00 AM - 2:00 PM",
     "hours": [
@@ -69,8 +69,8 @@
         "close": "14:00"
       }
     ],
-    "googleMapsUrl": "",
-    "updatedAt": "2025-12-29T00:00:00.000Z",
+    "googleMapsUrl": "https://www.google.com/maps/place/Arya+Homeo+Hall/@25.8728227,85.9195991",
+    "updatedAt": "2026-01-03T10:25:18.069Z",
     "social": {
       "facebook": "",
       "instagram": "",
@@ -93,7 +93,6 @@
           "Muscle strengthening protocols",
           "Holistic rehabilitation support"
         ],
-        "icon": "paralysis",
         "iconKey": "paralysis",
         "sortOrder": 10,
         "isPublished": true,
@@ -111,7 +110,6 @@
           "Pain management strategies",
           "Long-term wellness plans"
         ],
-        "icon": "polio",
         "iconKey": "polio",
         "sortOrder": 20,
         "isPublished": true,
@@ -129,7 +127,6 @@
           "Natural immune boosting",
           "Stress & anxiety management"
         ],
-        "icon": "neural",
         "iconKey": "neural",
         "sortOrder": 30,
         "isPublished": true,
@@ -159,5 +156,45 @@
         "updatedAt": "2025-12-29T00:00:00.000Z"
       }
     ]
+  },
+  "home": {
+    "hero": {
+      "titleLines": [
+        "Restoring",
+        "Movement,",
+        "Restoring Life"
+      ],
+      "subtitle": "For over a century, Arya Homoeo Hall has been a beacon of hope for those seeking natural, holistic healing. Specializing in paralysis and polio care, we combine time-tested homeopathic wisdom with compassionate treatment.",
+      "ctaPrimary": "Book Consultation",
+      "ctaSecondary": "Learn More"
+    },
+    "heroTag": {
+      "title": "Est. 1924",
+      "subtitle": "A Century of Care"
+    },
+    "heroStats": [
+      {
+        "value": "100+",
+        "label": "Years of Trust"
+      },
+      {
+        "value": "10K+",
+        "label": "Lives Touched"
+      },
+      {
+        "value": "100%",
+        "label": "Natural Care"
+      }
+    ],
+    "legacy": {
+      "titlePrefix": "A Century of",
+      "titleHighlight": "Healing Heritage",
+      "subtitle": "From humble beginnings in 1924 to becoming a trusted name in homeopathic paralysis and polio care, our journey reflects dedication, innovation, and unwavering commitment to patient wellbeing."
+    },
+    "experience": {
+      "title": "100 Years of Experience",
+      "quote": "What began as a single practitioner's vision has grown into a legacy of healing.\nWe've witnessed medical evolution while staying true to the core principles of\nhomeopathy— treating the whole person, not just symptoms.",
+      "author": "— The Arya Family Legacy"
+    }
   }
 }

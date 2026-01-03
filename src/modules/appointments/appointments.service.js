@@ -1,9 +1,6 @@
-const path = require('path');
 const crypto = require('crypto');
 
-const { readJsonArray, appendJsonArray, writeJsonArray } = require('../../utils/fileStore');
-
-const filePath = path.join(__dirname, '..', '..', 'data', 'appointments.json');
+const AppointmentRequest = require('../../models/AppointmentRequest');
 
 function normalizeItem(item) {
   const now = new Date().toISOString();
@@ -68,12 +65,12 @@ async function create(payload) {
     update_at: now,
   };
 
-  await appendJsonArray(filePath, item);
+  await AppointmentRequest.create(item);
   return item;
 }
 
 async function list() {
-  const items = await readJsonArray(filePath);
+  const items = await AppointmentRequest.find({}).lean();
   return items.map(normalizeItem);
 }
 
@@ -89,16 +86,13 @@ async function getById(id) {
 }
 
 async function patchById(id, patch) {
-  const items = (await readJsonArray(filePath)).map(normalizeItem);
-  const idx = items.findIndex((i) => i && i.id === id);
-  if (idx < 0) {
+  const now = new Date().toISOString();
+  const current = await AppointmentRequest.findOne({ id }).lean();
+  if (!current) {
     const err = new Error('Appointment request not found');
     err.statusCode = 404;
     throw err;
   }
-
-  const now = new Date().toISOString();
-  const current = items[idx];
 
   const merged = normalizeItem({
     ...current,
@@ -129,24 +123,23 @@ async function patchById(id, patch) {
     update_at: now,
   };
 
-  const nextItems = [...items];
-  nextItems[idx] = next;
-  await writeJsonArray(filePath, nextItems);
-  return next;
+  const saved = await AppointmentRequest.findOneAndUpdate(
+    { id },
+    { $set: next },
+    { new: true, lean: true }
+  );
+
+  return saved ? normalizeItem(saved) : next;
 }
 
 async function deleteById(id) {
-  const items = (await readJsonArray(filePath)).map(normalizeItem);
-  const idx = items.findIndex((i) => i && i.id === id);
-  if (idx < 0) {
+  const removed = await AppointmentRequest.findOneAndDelete({ id }).lean();
+  if (!removed) {
     const err = new Error('Appointment request not found');
     err.statusCode = 404;
     throw err;
   }
-  const removed = items[idx];
-  const nextItems = items.filter((i) => i && i.id !== id);
-  await writeJsonArray(filePath, nextItems);
-  return removed;
+  return normalizeItem(removed);
 }
 
 module.exports = {

@@ -4,7 +4,6 @@ const {
   AppointmentRequestPatchSchema,
 } = require('./appointments.validator');
 const appointmentService = require('./appointments.service');
-const notificationService = require('../../services/notificationService');
 
 async function createAppointment(req, res, next) {
   try {
@@ -18,14 +17,6 @@ async function createAppointment(req, res, next) {
     }
 
     const saved = await appointmentService.create(parsed.data);
-
-    if (notificationService && typeof notificationService.notifyNewAppointment === 'function') {
-      notificationService.notifyNewAppointment(saved).catch((err) => {
-        if (process.env.NODE_ENV !== 'production') {
-          console.error('notifyNewAppointment failed', err);
-        }
-      });
-    }
 
     return res.status(201).json({
       ok: true,

@@ -1,4 +1,4 @@
-const { FeedbackCreateSchema } = require('./feedback.validator');
+const { FeedbackCreateSchema, FeedbackPatchSchema } = require('./feedback.validator');
 const feedbackService = require('./feedback.service');
 
 async function createFeedback(req, res, next) {
@@ -41,4 +41,35 @@ async function listFeedback(req, res, next) {
   }
 }
 
-module.exports = { createFeedback, listFeedback };
+async function patchFeedback(req, res, next) {
+  try {
+    const { id } = req.params;
+    const parsed = FeedbackPatchSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({ ok: false, message: 'Validation error', errors: parsed.error.flatten() });
+    }
+
+    const updated = await feedbackService.patchById(id, parsed.data);
+    return res.json({ ok: true, message: 'Feedback updated', data: updated });
+  } catch (err) {
+    if (err && err.statusCode) {
+      return res.status(err.statusCode).json({ ok: false, message: err.message });
+    }
+    return next(err);
+  }
+}
+
+async function deleteFeedback(req, res, next) {
+  try {
+    const { id } = req.params;
+    const removed = await feedbackService.deleteById(id);
+    return res.json({ ok: true, message: 'Feedback deleted', data: removed });
+  } catch (err) {
+    if (err && err.statusCode) {
+      return res.status(err.statusCode).json({ ok: false, message: err.message });
+    }
+    return next(err);
+  }
+}
+
+module.exports = { createFeedback, listFeedback, patchFeedback, deleteFeedback };

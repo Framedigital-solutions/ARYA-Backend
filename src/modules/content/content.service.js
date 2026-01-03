@@ -166,9 +166,96 @@ function normalizeClinicProfile(content) {
   };
 }
 
+function defaultHome() {
+  return {
+    hero: {
+      titleLines: ['Restoring', 'Movement,', 'Restoring Life'],
+      subtitle:
+        'For over a century, Arya Homoeo Hall has been a beacon of hope for those seeking natural, holistic healing. '
+        + 'Specializing in paralysis and polio care, we combine time-tested homeopathic wisdom with compassionate '
+        + 'treatment.',
+      ctaPrimary: 'Book Consultation',
+      ctaSecondary: 'Learn More',
+    },
+    heroTag: {
+      title: 'Est. 1924',
+      subtitle: 'A Century of Care',
+    },
+    heroStats: [
+      { value: '100+', label: 'Years of Trust' },
+      { value: '10K+', label: 'Lives Touched' },
+      { value: '100%', label: 'Natural Care' },
+    ],
+    legacy: {
+      titlePrefix: 'A Century of',
+      titleHighlight: 'Healing Heritage',
+      subtitle:
+        'From humble beginnings in 1924 to becoming a trusted name in homeopathic paralysis and polio care, our '
+        + 'journey reflects dedication, innovation, and unwavering commitment to patient wellbeing.',
+    },
+    experience: {
+      title: '100 Years of Experience',
+      quote:
+        "What began as a single practitioner's vision has grown into a legacy of healing.\n"
+        + "We've witnessed medical evolution while staying true to the core principles of\n"
+        + 'homeopathy— treating the whole person, not just symptoms.',
+      author: '— The Arya Family Legacy',
+    },
+  };
+}
+
+function normalizeHomeSection(content) {
+  const base = content && typeof content === 'object' ? content : {};
+  const defaults = defaultHome();
+
+  const home = base.home && typeof base.home === 'object' ? base.home : {};
+  const hero = home.hero && typeof home.hero === 'object' ? home.hero : {};
+  const heroTag = home.heroTag && typeof home.heroTag === 'object' ? home.heroTag : {};
+  const legacy = home.legacy && typeof home.legacy === 'object' ? home.legacy : {};
+  const experience = home.experience && typeof home.experience === 'object' ? home.experience : {};
+
+  const heroStats = Array.isArray(home.heroStats) ? home.heroStats : [];
+  const nextHeroStats = heroStats
+    .filter(Boolean)
+    .slice(0, 6)
+    .map((s) => ({
+      value: typeof s.value === 'string' ? s.value : '',
+      label: typeof s.label === 'string' ? s.label : '',
+    }))
+    .filter((s) => s.value || s.label);
+
+  return {
+    ...base,
+    home: {
+      hero: {
+        titleLines: Array.isArray(hero.titleLines) && hero.titleLines.length ? hero.titleLines : defaults.hero.titleLines,
+        subtitle: typeof hero.subtitle === 'string' && hero.subtitle.length ? hero.subtitle : defaults.hero.subtitle,
+        ctaPrimary: typeof hero.ctaPrimary === 'string' && hero.ctaPrimary.length ? hero.ctaPrimary : defaults.hero.ctaPrimary,
+        ctaSecondary: typeof hero.ctaSecondary === 'string' && hero.ctaSecondary.length ? hero.ctaSecondary : defaults.hero.ctaSecondary,
+      },
+      heroTag: {
+        title: typeof heroTag.title === 'string' && heroTag.title.length ? heroTag.title : defaults.heroTag.title,
+        subtitle: typeof heroTag.subtitle === 'string' && heroTag.subtitle.length ? heroTag.subtitle : defaults.heroTag.subtitle,
+      },
+      heroStats: nextHeroStats.length ? nextHeroStats : defaults.heroStats,
+      legacy: {
+        titlePrefix: typeof legacy.titlePrefix === 'string' && legacy.titlePrefix.length ? legacy.titlePrefix : defaults.legacy.titlePrefix,
+        titleHighlight: typeof legacy.titleHighlight === 'string' && legacy.titleHighlight.length ? legacy.titleHighlight : defaults.legacy.titleHighlight,
+        subtitle: typeof legacy.subtitle === 'string' && legacy.subtitle.length ? legacy.subtitle : defaults.legacy.subtitle,
+      },
+      experience: {
+        title: typeof experience.title === 'string' && experience.title.length ? experience.title : defaults.experience.title,
+        quote: typeof experience.quote === 'string' && experience.quote.length ? experience.quote : defaults.experience.quote,
+        author: typeof experience.author === 'string' && experience.author.length ? experience.author : defaults.experience.author,
+      },
+    },
+  };
+}
+
 function defaultContent() {
   return {
     updatedAt: new Date().toISOString(),
+    home: defaultHome(),
     hero: {
       titleLines: ['Restoring', 'Movement,', 'Restoring Life'],
       subtitle:
@@ -293,7 +380,7 @@ function defaultContent() {
 
 async function getAll() {
   const data = await readJson(filePath, defaultContent());
-  return normalizeTestimonialsSection(normalizeClinicProfile(normalizeProgramsSection(data)));
+  return normalizeTestimonialsSection(normalizeClinicProfile(normalizeProgramsSection(normalizeHomeSection(data))));
 }
 
 async function getSection(section) {
@@ -395,6 +482,61 @@ async function deleteClinicProfile() {
   const removed = all.clinicProfile;
   const next = { ...all };
   delete next.clinicProfile;
+  await setAll(next);
+  return removed;
+}
+
+async function getHome() {
+  const all = await getAll();
+  return all.home;
+}
+
+function mergeHome(existing, input, isPatch) {
+  const current = existing && typeof existing === 'object' ? existing : defaultHome();
+  const next = input && typeof input === 'object' ? input : {};
+
+  const merged = {
+    ...current,
+    ...(isPatch ? {} : {}),
+    ...(typeof next.hero === 'object' && next.hero ? { hero: { ...(current.hero || {}), ...next.hero } } : {}),
+    ...(typeof next.heroTag === 'object' && next.heroTag ? { heroTag: { ...(current.heroTag || {}), ...next.heroTag } } : {}),
+    ...(typeof next.legacy === 'object' && next.legacy ? { legacy: { ...(current.legacy || {}), ...next.legacy } } : {}),
+    ...(typeof next.experience === 'object' && next.experience ? { experience: { ...(current.experience || {}), ...next.experience } } : {}),
+    ...(Array.isArray(next.heroStats) ? { heroStats: next.heroStats } : {}),
+  };
+
+  return normalizeHomeSection({ home: merged }).home;
+}
+
+async function upsertHome(payload) {
+  const all = await getAll();
+  const nextHome = normalizeHomeSection({ home: payload }).home;
+  const next = {
+    ...all,
+    home: nextHome,
+  };
+  await setAll(next);
+  return nextHome;
+}
+
+async function patchHome(patch) {
+  const all = await getAll();
+  const nextHome = mergeHome(all.home, patch, true);
+  const next = {
+    ...all,
+    home: nextHome,
+  };
+  await setAll(next);
+  return nextHome;
+}
+
+async function deleteHome() {
+  const all = await getAll();
+  const removed = all.home;
+  const next = {
+    ...all,
+    home: defaultHome(),
+  };
   await setAll(next);
   return removed;
 }
@@ -663,6 +805,10 @@ module.exports = {
   getSection,
   setAll,
   setSection,
+  getHome,
+  upsertHome,
+  patchHome,
+  deleteHome,
   listPrograms,
   createProgram,
   updateProgram,

@@ -2,6 +2,7 @@ const contentService = require('./content.service');
 const { ProgramCreateSchema, ProgramUpdateSchema } = require('./programs.validator');
 const { ClinicProfileUpsertSchema, ClinicProfilePatchSchema } = require('./clinicProfile.validator');
 const { TestimonialCreateSchema, TestimonialUpdateSchema } = require('./testimonials.validator');
+const { HomeUpsertSchema, HomePatchSchema } = require('./home.validator');
 
 async function getContent(req, res, next) {
   try {
@@ -140,6 +141,65 @@ async function deleteClinicProfile(req, res, next) {
   }
 }
 
+async function getHomePublic(req, res, next) {
+  try {
+    const data = await contentService.getHome();
+    return res.json({ ok: true, data });
+  } catch (err) {
+    return next(err);
+  }
+}
+
+async function getHomeAdmin(req, res, next) {
+  return getHomePublic(req, res, next);
+}
+
+async function upsertHome(req, res, next) {
+  try {
+    const parsed = HomeUpsertSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({ ok: false, message: 'Validation error', errors: parsed.error.flatten() });
+    }
+
+    const saved = await contentService.upsertHome(parsed.data);
+    return res.json({ ok: true, message: 'Home content updated', data: saved });
+  } catch (err) {
+    if (err && err.statusCode) {
+      return res.status(err.statusCode).json({ ok: false, message: err.message });
+    }
+    return next(err);
+  }
+}
+
+async function patchHome(req, res, next) {
+  try {
+    const parsed = HomePatchSchema.safeParse(req.body);
+    if (!parsed.success) {
+      return res.status(400).json({ ok: false, message: 'Validation error', errors: parsed.error.flatten() });
+    }
+
+    const saved = await contentService.patchHome(parsed.data);
+    return res.json({ ok: true, message: 'Home content updated', data: saved });
+  } catch (err) {
+    if (err && err.statusCode) {
+      return res.status(err.statusCode).json({ ok: false, message: err.message });
+    }
+    return next(err);
+  }
+}
+
+async function deleteHome(req, res, next) {
+  try {
+    const removed = await contentService.deleteHome();
+    return res.json({ ok: true, message: 'Home content reset', data: removed });
+  } catch (err) {
+    if (err && err.statusCode) {
+      return res.status(err.statusCode).json({ ok: false, message: err.message });
+    }
+    return next(err);
+  }
+}
+
 async function listTestimonialsPublic(req, res, next) {
   try {
     const data = await contentService.listTestimonials({ includeUnpublished: false });
@@ -263,6 +323,11 @@ module.exports = {
   upsertClinicProfile,
   patchClinicProfile,
   deleteClinicProfile,
+  getHomePublic,
+  getHomeAdmin,
+  upsertHome,
+  patchHome,
+  deleteHome,
   listTestimonialsPublic,
   listTestimonialsAdmin,
   createTestimonial,
