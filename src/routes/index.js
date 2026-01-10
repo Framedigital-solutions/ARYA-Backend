@@ -7,6 +7,8 @@ const appointmentRoutes = require('../modules/appointments/appointments.routes')
 const contentRoutes = require('../modules/content/content.routes');
 const adminUsersRoutes = require('../modules/adminUsers/adminUsers.routes');
 const feedbackRoutes = require('../modules/feedback/feedback.routes');
+const notificationsRoutes = require('../modules/notifications/notifications.routes');
+const settingsRoutes = require('../modules/settings/settings.routes');
 
 const router = express.Router();
 
@@ -17,5 +19,7 @@ router.use('/appointments', appointmentRoutes);
 router.use('/content', contentRoutes);
 router.use('/admin-users', adminUsersRoutes);
 router.use('/feedback', feedbackRoutes);
+router.use('/notifications', notificationsRoutes);
+router.use('/settings', settingsRoutes);
 
 module.exports = router;

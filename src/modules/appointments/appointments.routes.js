@@ -10,17 +10,17 @@ const {
   deleteAppointmentRequest,
 } = require('./appointments.controller');
 
-const { requireAdminAuth } = require('../../middlewares/requireAdminAuth');
+const { requireAdminAuth, requireAdminPermission } = require('../../middlewares/requireAdminAuth');
 
 const router = express.Router();
 
 router.post('/', createAppointment);
 router.get('/', listAppointments);
 
-router.get('/requests', requireAdminAuth, listAppointmentRequests);
-router.post('/requests', requireAdminAuth, createAppointmentRequest);
-router.get('/requests/:id', requireAdminAuth, getAppointmentRequest);
-router.patch('/requests/:id', requireAdminAuth, patchAppointmentRequest);
-router.delete('/requests/:id', requireAdminAuth, deleteAppointmentRequest);
+router.get('/requests', requireAdminAuth, requireAdminPermission('appointments.manage'), listAppointmentRequests);
+router.post('/requests', requireAdminAuth, requireAdminPermission('appointments.manage'), createAppointmentRequest);
+router.get('/requests/:id', requireAdminAuth, requireAdminPermission('appointments.manage'), getAppointmentRequest);
+router.patch('/requests/:id', requireAdminAuth, requireAdminPermission('appointments.manage'), patchAppointmentRequest);
+router.delete('/requests/:id', requireAdminAuth, requireAdminPermission('appointments.manage'), deleteAppointmentRequest);
 
 module.exports = router;

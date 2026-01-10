@@ -6,7 +6,7 @@ function errorHandler(err, req, res, next) {
   const message =
     isProd && status >= 500
       ? 'Internal server error'
-      : err.message || 'Request failed';
+      : err.message || 'Something went wrong';
 
   if (!isProd) {
     // eslint-disable-next-line no-console

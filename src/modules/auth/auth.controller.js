@@ -43,14 +43,10 @@ async function login(req, res, next) {
       return res.status(401).json({ ok: false, message: 'Invalid credentials' });
     }
 
-    const isDev = String(process.env.NODE_ENV || '').toLowerCase() !== 'production';
-    const secret = process.env.AUTH_SECRET || process.env.ADMIN_API_KEY || (isDev ? 'dev_auth_secret_change_me' : '');
-    if (!secret) {
-      return res.status(500).json({ ok: false, message: 'Auth secret not configured' });
-    }
+    const secret = process.env.AUTH_SECRET || process.env.ADMIN_API_KEY || 'dev_auth_secret_change_me';
 
     const token = signToken(
-      { sub: user.id, email: user.email, role: user.role },
+      { sub: user.id, email: user.email, role: user.role, perms: user.permissions || {} },
       secret,
       { expiresInSeconds: 60 * 60 * 24 * 7 }
     );

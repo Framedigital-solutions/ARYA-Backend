@@ -53,28 +53,45 @@ async function seedFeedbackIfEmpty() {
 }
 
 async function seedBootstrapAdminIfEmpty() {
-  const email = process.env.BOOTSTRAP_ADMIN_EMAIL;
-  const password = process.env.BOOTSTRAP_ADMIN_PASSWORD;
-  const count = await AdminUser.estimatedDocumentCount();
-  if (count > 0) return;
-
   const isDev = String(process.env.NODE_ENV || '').toLowerCase() !== 'production';
-  const nextEmail = email || (isDev ? 'admin@example.com' : '');
-  const nextPassword = password || (isDev ? 'Admin@12345' : '');
-  if (!nextEmail || !nextPassword) return;
 
-  const name = process.env.BOOTSTRAP_ADMIN_NAME || 'Admin';
-  await adminUsersService.create({
-    name,
-    email: nextEmail,
-    password: nextPassword,
-    role: 'admin',
-    is_active: true,
-  });
+  const envEmail = process.env.BOOTSTRAP_ADMIN_EMAIL;
+  const envPassword = process.env.BOOTSTRAP_ADMIN_PASSWORD;
+  const envReset = String(process.env.BOOTSTRAP_ADMIN_RESET || '').toLowerCase() === 'true';
+
+  const desiredEmail = String(envEmail || (isDev ? 'admin@example.com' : '')).trim().toLowerCase();
+  const desiredPassword = String(envPassword || (isDev ? 'Admin@12345' : ''));
+  if (!desiredEmail || !desiredPassword) return;
+
+  const desiredName = String(process.env.BOOTSTRAP_ADMIN_NAME || 'Admin');
+  const shouldReset = isDev || envReset;
+
+  const existing = await AdminUser.findOne({ email: desiredEmail }).lean();
+  if (!existing) {
+    await adminUsersService.create({
+      name: desiredName,
+      email: desiredEmail,
+      password: desiredPassword,
+      role: 'admin',
+      is_active: true,
+    });
+    return;
+  }
+
+  if (shouldReset) {
+    await adminUsersService.patchById(existing.id, {
+      name: desiredName,
+      password: desiredPassword,
+      role: 'admin',
+      is_active: true,
+    });
+  }
 }
 
 async function connectDb() {
-  const uri = process.env.MONGODB_URI;
+  const isDev = String(process.env.NODE_ENV || '').toLowerCase() !== 'production';
+
+  const uri = process.env.MONGODB_URI || (isDev ? 'mongodb://127.0.0.1:27017/arya' : '');
   if (!uri) {
     throw new Error('Missing MONGODB_URI');
   }

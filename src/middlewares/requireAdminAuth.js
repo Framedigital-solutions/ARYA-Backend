@@ -33,4 +33,43 @@ function requireAdminAuth(req, res, next) {
   return res.status(401).json({ ok: false, message: 'Unauthorized' });
 }
 
-module.exports = { requireAdminAuth };
+function requireAdminRole(roleOrRoles) {
+  const required = Array.isArray(roleOrRoles) ? roleOrRoles : [roleOrRoles];
+  const normalized = required.map((r) => String(r || '').toLowerCase()).filter(Boolean);
+
+  return function requireAdminRoleMiddleware(req, res, next) {
+    const role = req && req.admin && req.admin.role ? String(req.admin.role).toLowerCase() : '';
+    const isLegacy = Boolean(req && req.admin && req.admin.legacy);
+    const ok = isLegacy || (role && normalized.includes(role));
+    if (!ok) return res.status(403).json({ ok: false, message: 'Forbidden' });
+    return next();
+  };
+}
+
+function requireAdminPermission(permissionOrPermissions) {
+  const required = Array.isArray(permissionOrPermissions) ? permissionOrPermissions : [permissionOrPermissions];
+  const normalized = required.map((p) => String(p || '').trim()).filter(Boolean);
+
+  return function requireAdminPermissionMiddleware(req, res, next) {
+    const role = req && req.admin && req.admin.role ? String(req.admin.role).toLowerCase() : '';
+    const isLegacy = Boolean(req && req.admin && req.admin.legacy);
+    if (isLegacy || role === 'admin') return next();
+
+    const perms = req && req.admin && req.admin.perms && typeof req.admin.perms === 'object' ? req.admin.perms : {};
+    const defaults = {
+      'appointments.manage': true,
+      'inquiries.manage': true,
+      'feedback.manage': true,
+      'notifications.read': true,
+    };
+
+    const ok = normalized.every((key) => {
+      if (perms && Object.prototype.hasOwnProperty.call(perms, key)) return Boolean(perms[key]);
+      return Boolean(Object.prototype.hasOwnProperty.call(defaults, key) ? defaults[key] : false);
+    });
+    if (!ok) return res.status(403).json({ ok: false, message: 'Forbidden' });
+    return next();
+  };
+}
+
+module.exports = { requireAdminAuth, requireAdminRole, requireAdminPermission };

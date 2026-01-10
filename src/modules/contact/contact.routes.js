@@ -9,16 +9,16 @@ const {
   deleteInquiry,
 } = require('./contact.controller');
 
-const { requireAdminAuth } = require('../../middlewares/requireAdminAuth');
+const { requireAdminAuth, requireAdminPermission } = require('../../middlewares/requireAdminAuth');
 
 const router = express.Router();
 
 router.post('/', createContact);
 
-router.get('/inquiries', requireAdminAuth, listInquiries);
-router.post('/inquiries', requireAdminAuth, createInquiry);
-router.get('/inquiries/:id', requireAdminAuth, getInquiry);
-router.patch('/inquiries/:id', requireAdminAuth, patchInquiry);
-router.delete('/inquiries/:id', requireAdminAuth, deleteInquiry);
+router.get('/inquiries', requireAdminAuth, requireAdminPermission('inquiries.manage'), listInquiries);
+router.post('/inquiries', requireAdminAuth, requireAdminPermission('inquiries.manage'), createInquiry);
+router.get('/inquiries/:id', requireAdminAuth, requireAdminPermission('inquiries.manage'), getInquiry);
+router.patch('/inquiries/:id', requireAdminAuth, requireAdminPermission('inquiries.manage'), patchInquiry);
+router.delete('/inquiries/:id', requireAdminAuth, requireAdminPermission('inquiries.manage'), deleteInquiry);
 
 module.exports = router;

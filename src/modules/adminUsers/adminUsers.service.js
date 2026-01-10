@@ -47,6 +47,7 @@ async function create(payload) {
     password_hash: hashPassword(payload.password),
     role: payload.role,
     is_active: typeof payload.is_active === 'boolean' ? payload.is_active : true,
+    permissions: payload && payload.permissions && typeof payload.permissions === 'object' ? payload.permissions : {},
     last_login_at: '',
     created_at: now,
     update_at: now,
@@ -81,6 +82,10 @@ async function patchById(id, patch) {
     ...patch,
     email: typeof patch.email !== 'undefined' ? normalizeEmail(patch.email) : current.email,
     password_hash: typeof patch.password !== 'undefined' ? hashPassword(patch.password) : current.password_hash,
+    permissions:
+      typeof patch.permissions !== 'undefined' && patch.permissions && typeof patch.permissions === 'object'
+        ? patch.permissions
+        : current.permissions || {},
     update_at: now,
   };
 

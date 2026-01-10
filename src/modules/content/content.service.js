@@ -171,30 +171,30 @@ function defaultHome() {
     hero: {
       titleLines: ['Restoring', 'Movement,', 'Restoring Life'],
       subtitle:
-        'For over a century, Arya Homoeo Hall has been a beacon of hope for those seeking natural, holistic healing. '
+        'For over 40 years, Arya Homoeo Hall has been a beacon of hope for those seeking natural, holistic healing. '
         + 'Specializing in paralysis and polio care, we combine time-tested homeopathic wisdom with compassionate '
         + 'treatment.',
       ctaPrimary: 'Book Consultation',
       ctaSecondary: 'Learn More',
     },
     heroTag: {
-      title: 'Est. 1924',
-      subtitle: 'A Century of Care',
+      title: 'Est. 1985',
+      subtitle: '41 Years of Care',
     },
     heroStats: [
-      { value: '100+', label: 'Years of Trust' },
+      { value: '41+', label: 'Years of Trust' },
       { value: '10K+', label: 'Lives Touched' },
       { value: '100%', label: 'Natural Care' },
     ],
     legacy: {
-      titlePrefix: 'A Century of',
+      titlePrefix: '41 Years of',
       titleHighlight: 'Healing Heritage',
       subtitle:
-        'From humble beginnings in 1924 to becoming a trusted name in homeopathic paralysis and polio care, our '
+        'From humble beginnings in 1985 to becoming a trusted name in homeopathic paralysis and polio care, our '
         + 'journey reflects dedication, innovation, and unwavering commitment to patient wellbeing.',
     },
     experience: {
-      title: '100 Years of Experience',
+      title: '41 Years of Experience',
       quote:
         "What began as a single practitioner's vision has grown into a legacy of healing.\n"
         + "We've witnessed medical evolution while staying true to the core principles of\n"
@@ -259,13 +259,13 @@ function defaultContent() {
     hero: {
       titleLines: ['Restoring', 'Movement,', 'Restoring Life'],
       subtitle:
-        'For over a century, Arya Homoeo Hall has been a beacon of hope for those seeking natural, holistic healing.',
+        'For over 40 years, Arya Homoeo Hall has been a beacon of hope for those seeking natural, holistic healing.',
       ctaPrimary: 'Book Consultation',
       ctaSecondary: 'Learn More',
     },
     clinic: {
       name: 'Arya Homoeo Hall',
-      since: '1924',
+      since: '1985',
       phones: ['+91 98765 43210', '+91 87654 32109'],
       email: ['info@aryahomoeohall.com', 'appointments@aryahomoeohall.com'],
       addressLines: ['123 Heritage Lane', 'Old City, Mumbai 400001'],
@@ -274,8 +274,8 @@ function defaultContent() {
     clinicProfile: {
       id: 'clinic_main',
       name: 'Arya Homoeo Hall',
-      since: '1924',
-      tagline: 'Healing Since 1924',
+      since: '1985',
+      tagline: 'Healing Since 1985',
       primaryPhone: '+91 98765 43210',
       secondaryPhone: '+91 87654 32109',
       whatsappNumber: '',

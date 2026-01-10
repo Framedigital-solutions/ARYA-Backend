@@ -8,6 +8,7 @@ const AdminUserSchema = new mongoose.Schema(
     password_hash: { type: String, required: true },
     role: { type: String, required: true },
     is_active: { type: Boolean, required: true, default: true },
+    permissions: { type: mongoose.Schema.Types.Mixed, required: false, default: {} },
     last_login_at: { type: String, required: false, default: '' },
     created_at: { type: String, required: true },
     update_at: { type: String, required: true },
