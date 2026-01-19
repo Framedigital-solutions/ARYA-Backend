@@ -9,6 +9,7 @@ const rateLimit = require('express-rate-limit');
 const routes = require('./routes');
 const { notFound } = require('./middlewares/notFound');
 const { errorHandler } = require('./middlewares/errorHandler');
+const { sendSuccess } = require('./utils/response');
 
 const app = express();
 
@@ -50,7 +51,7 @@ app.use(
 );
 
 app.get('/', (req, res) => {
-  res.json({ ok: true, message: 'Server is running' });
+  return sendSuccess(res, { message: 'Server is running', data: { running: true } });
 });
 
 app.use('/api', (req, res, next) => {

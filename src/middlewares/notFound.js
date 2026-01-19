@@ -1,5 +1,7 @@
+const { sendError } = require('../utils/response');
+
 function notFound(req, res) {
-  res.status(404).json({ ok: false, message: 'Route not found' });
+  return sendError(res, { status: 404, message: 'Route not found' });
 }
 
 module.exports = { notFound };

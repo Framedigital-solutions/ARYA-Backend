@@ -1,4 +1,5 @@
 const { verifyToken } = require('../utils/authToken');
+const { sendError } = require('../utils/response');
 
 function requireAdminAuth(req, res, next) {
   const auth = req.get('authorization') || '';
@@ -7,7 +8,7 @@ function requireAdminAuth(req, res, next) {
   const isDev = String(process.env.NODE_ENV || '').toLowerCase() !== 'production';
   const secret = process.env.AUTH_SECRET || process.env.ADMIN_API_KEY || (isDev ? 'dev_auth_secret_change_me' : '');
   if (!secret) {
-    return res.status(500).json({ ok: false, message: 'Auth secret not configured' });
+    return sendError(res, { status: 500, message: 'Auth secret not configured' });
   }
 
   if (m && m[1]) {
@@ -16,7 +17,7 @@ function requireAdminAuth(req, res, next) {
       req.admin = payload;
       return next();
     } catch (err) {
-      return res.status(401).json({ ok: false, message: err && err.message ? err.message : 'Unauthorized' });
+      return sendError(res, { status: 401, message: err && err.message ? err.message : 'Unauthorized' });
     }
   }
 
@@ -30,7 +31,7 @@ function requireAdminAuth(req, res, next) {
     }
   }
 
-  return res.status(401).json({ ok: false, message: 'Unauthorized' });
+  return sendError(res, { status: 401, message: 'Unauthorized' });
 }
 
 function requireAdminRole(roleOrRoles) {
@@ -41,7 +42,7 @@ function requireAdminRole(roleOrRoles) {
     const role = req && req.admin && req.admin.role ? String(req.admin.role).toLowerCase() : '';
     const isLegacy = Boolean(req && req.admin && req.admin.legacy);
     const ok = isLegacy || (role && normalized.includes(role));
-    if (!ok) return res.status(403).json({ ok: false, message: 'Forbidden' });
+    if (!ok) return sendError(res, { status: 403, message: 'Forbidden' });
     return next();
   };
 }
@@ -56,18 +57,12 @@ function requireAdminPermission(permissionOrPermissions) {
     if (isLegacy || role === 'admin') return next();
 
     const perms = req && req.admin && req.admin.perms && typeof req.admin.perms === 'object' ? req.admin.perms : {};
-    const defaults = {
-      'appointments.manage': true,
-      'inquiries.manage': true,
-      'feedback.manage': true,
-      'notifications.read': true,
-    };
-
     const ok = normalized.every((key) => {
-      if (perms && Object.prototype.hasOwnProperty.call(perms, key)) return Boolean(perms[key]);
-      return Boolean(Object.prototype.hasOwnProperty.call(defaults, key) ? defaults[key] : false);
+      if (!perms || typeof perms !== 'object') return false;
+      if (!Object.prototype.hasOwnProperty.call(perms, key)) return false;
+      return Boolean(perms[key]);
     });
-    if (!ok) return res.status(403).json({ ok: false, message: 'Forbidden' });
+    if (!ok) return sendError(res, { status: 403, message: 'Forbidden' });
     return next();
   };
 }

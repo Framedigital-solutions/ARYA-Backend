@@ -75,14 +75,15 @@ async function list() {
 }
 
 async function listRequests({ status } = {}) {
-  const items = await list();
-  if (status) return items.filter((i) => i && i.status === status);
-  return items;
+  const query = {};
+  if (status) query.status = status;
+  const items = await AppointmentRequest.find(query).lean();
+  return items.map(normalizeItem);
 }
 
 async function getById(id) {
-  const items = await list();
-  return items.find((i) => i && i.id === id);
+  const doc = await AppointmentRequest.findOne({ id }).lean();
+  return doc ? normalizeItem(doc) : undefined;
 }
 
 async function patchById(id, patch) {

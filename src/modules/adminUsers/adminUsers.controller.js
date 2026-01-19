@@ -1,5 +1,6 @@
 const adminUsersService = require('./adminUsers.service');
 const { AdminUserCreateSchema, AdminUserPatchSchema } = require('./adminUsers.validator');
+const { sendError, sendSuccess } = require('../../utils/response');
 
 function isAdmin(req) {
   const role = req && req.admin && req.admin.role ? String(req.admin.role).toLowerCase() : '';
@@ -15,14 +16,14 @@ function isSelf(req, userId) {
 }
 
 function forbid(res) {
-  return res.status(403).json({ ok: false, message: 'Forbidden' });
+  return sendError(res, { status: 403, message: 'Forbidden' });
 }
 
 async function listAdminUsers(req, res, next) {
   try {
     if (!isAdmin(req)) return forbid(res);
     const data = await adminUsersService.list();
-    return res.json({ ok: true, data });
+    return sendSuccess(res, { data });
   } catch (err) {
     return next(err);
   }
@@ -34,9 +35,9 @@ async function getAdminUser(req, res, next) {
     if (!isAdmin(req) && !isSelf(req, id)) return forbid(res);
     const data = await adminUsersService.getById(id);
     if (!data) {
-      return res.status(404).json({ ok: false, message: 'Admin user not found' });
+      return sendError(res, { status: 404, message: 'Admin user not found' });
     }
-    return res.json({ ok: true, data });
+    return sendSuccess(res, { data });
   } catch (err) {
     return next(err);
   }
@@ -47,14 +48,14 @@ async function createAdminUser(req, res, next) {
     if (!isAdmin(req)) return forbid(res);
     const parsed = AdminUserCreateSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ ok: false, message: 'Validation error', errors: parsed.error.flatten() });
+      return sendError(res, { status: 400, message: 'Validation error', error: parsed.error.flatten() });
     }
 
     const created = await adminUsersService.create(parsed.data);
-    return res.status(201).json({ ok: true, message: 'Admin user created', data: created });
+    return sendSuccess(res, { status: 201, message: 'Admin user created', data: created });
   } catch (err) {
     if (err && err.statusCode) {
-      return res.status(err.statusCode).json({ ok: false, message: err.message });
+      return sendError(res, { status: err.statusCode, message: err.message });
     }
     return next(err);
   }
@@ -66,7 +67,7 @@ async function patchAdminUser(req, res, next) {
     if (!isAdmin(req) && !isSelf(req, id)) return forbid(res);
     const parsed = AdminUserPatchSchema.safeParse(req.body);
     if (!parsed.success) {
-      return res.status(400).json({ ok: false, message: 'Validation error', errors: parsed.error.flatten() });
+      return sendError(res, { status: 400, message: 'Validation error', error: parsed.error.flatten() });
     }
 
     const payload = parsed.data;
@@ -78,10 +79,10 @@ async function patchAdminUser(req, res, next) {
     }
 
     const updated = await adminUsersService.patchById(id, payload);
-    return res.json({ ok: true, message: 'Admin user updated', data: updated });
+    return sendSuccess(res, { message: 'Admin user updated', data: updated });
   } catch (err) {
     if (err && err.statusCode) {
-      return res.status(err.statusCode).json({ ok: false, message: err.message });
+      return sendError(res, { status: err.statusCode, message: err.message });
     }
     return next(err);
   }
@@ -92,10 +93,10 @@ async function deleteAdminUser(req, res, next) {
     const { id } = req.params;
     if (!isAdmin(req) && !isSelf(req, id)) return forbid(res);
     const removed = await adminUsersService.deleteById(id);
-    return res.json({ ok: true, message: 'Admin user deleted', data: removed });
+    return sendSuccess(res, { message: 'Admin user deleted', data: removed });
   } catch (err) {
     if (err && err.statusCode) {
-      return res.status(err.statusCode).json({ ok: false, message: err.message });
+      return sendError(res, { status: err.statusCode, message: err.message });
     }
     return next(err);
   }

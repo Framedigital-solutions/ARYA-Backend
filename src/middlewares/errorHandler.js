@@ -1,3 +1,5 @@
+const { sendError } = require('../utils/response');
+
 function errorHandler(err, req, res, next) {
   const status = Number(err.statusCode || err.status || 500);
 
@@ -13,10 +15,10 @@ function errorHandler(err, req, res, next) {
     console.error(err);
   }
 
-  res.status(status).json({
-    ok: false,
+  return sendError(res, {
+    status,
     message,
-    ...(isProd ? {} : { stack: err && err.stack ? err.stack : '' }),
+    error: isProd ? null : { stack: err && err.stack ? err.stack : '' },
   });
 }
 
