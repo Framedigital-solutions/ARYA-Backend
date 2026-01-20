@@ -1,0 +1,206 @@
+{
+  "updatedAt": "2026-01-20T11:38:25.119Z",
+  "home": {
+    "heroImageUrl": "https://res.cloudinary.com/dhlxz1uqf/image/upload/v1768909104/arya-homoeo-hall/z0wrjurffnja16zcysbb.png",
+    "hero": {
+      "titleLines": [
+        "Restoring",
+        "Movement,",
+        "Restoring Life"
+      ],
+      "subtitle": "For over 40 years, Arya Homoeo Hall has been a beacon of hope for those seeking natural, holistic healing. Specializing in paralysis and polio care, we combine time-tested homeopathic wisdom with compassionate treatment.",
+      "ctaPrimary": "Book Consultation",
+      "ctaSecondary": "Learn More"
+    },
+    "heroTag": {
+      "title": "Est. 1985",
+      "subtitle": "41 Years of Care"
+    },
+    "heroStats": [
+      {
+        "value": "41+",
+        "label": "Years of Trust"
+      },
+      {
+        "value": "10K+",
+        "label": "Lives Touched"
+      },
+      {
+        "value": "100%",
+        "label": "Natural Care"
+      }
+    ],
+    "legacy": {
+      "titlePrefix": "41 Years of",
+      "titleHighlight": "Healing Heritage",
+      "subtitle": "From humble beginnings in 1985 to becoming a trusted name in homeopathic paralysis and polio care, our journey reflects dedication, innovation, and unwavering commitment to patient wellbeing."
+    },
+    "experience": {
+      "title": "41 Years of Experience",
+      "quote": "What began as a single practitioner's vision has grown into a legacy of healing.\nWe've witnessed medical evolution while staying true to the core principles of\nhomeopathy— treating the whole person, not just symptoms.",
+      "author": "— The Arya Family Legacy"
+    }
+  },
+  "hero": {
+    "titleLines": [
+      "Restoring",
+      "Movement,",
+      "Restoring Life"
+    ],
+    "subtitle": "For over 40 years, Arya Homoeo Hall has been a beacon of hope for those seeking natural, holistic healing.",
+    "ctaPrimary": "Book Consultation",
+    "ctaSecondary": "Learn More"
+  },
+  "clinic": {
+    "name": "Arya Homoeo Hall",
+    "since": "1985",
+    "phones": [
+      "+91 98765 43210",
+      "+91 87654 32109"
+    ],
+    "email": [
+      "info@aryahomoeohall.com",
+      "appointments@aryahomoeohall.com"
+    ],
+    "addressLines": [
+      "123 Heritage Lane",
+      "Old City, Mumbai 400001"
+    ],
+    "hours": [
+      "Mon-Sat: 9:00 AM - 7:00 PM",
+      "Sunday: 10:00 AM - 2:00 PM"
+    ]
+  },
+  "clinicProfile": {
+    "id": "clinic_main",
+    "name": "Arya Homoeo Hall",
+    "since": "1985",
+    "tagline": "Healing Since 1985",
+    "primaryPhone": "9973062638",
+    "secondaryPhone": "",
+    "whatsappNumber": "",
+    "phones": [
+      "9973062638"
+    ],
+    "emails": [
+      "info@aryahomoeohall.com",
+      "appointments@aryahomoeohall.com"
+    ],
+    "addressText": "123 Heritage Lane, Old City, Mumbai 400001",
+    "address": {
+      "line1": "123 Heritage Lane",
+      "line2": "Old City, Mumbai 400001",
+      "city": "Mumbai",
+      "state": "MH",
+      "pincode": "400001",
+      "country": "IN",
+      "googleMapsUrl": "https://maps.app.goo.gl/x4GCk3Wzo4UemYFt6"
+    },
+    "hoursText": "Mon-Sat: 9:00 AM - 7:00 PM | Sunday: 10:00 AM - 2:00 PM",
+    "hours": [
+      {
+        "label": "Mon-Sat",
+        "open": "09:00",
+        "close": "19:00"
+      },
+      {
+        "label": "Sun",
+        "open": "10:00",
+        "close": "14:00"
+      }
+    ],
+    "googleMapsUrl": "https://maps.app.goo.gl/x4GCk3Wzo4UemYFt6",
+    "updatedAt": "2026-01-20T11:37:36.332Z",
+    "social": {
+      "facebook": "",
+      "instagram": "",
+      "youtube": "",
+      "linkedin": ""
+    },
+    "establishedYear": "",
+    "establishedYears": "",
+    "founders": [],
+    "workingDoctors": [],
+    "specializations": [],
+    "logoUrl": "https://res.cloudinary.com/dhlxz1uqf/image/upload/v1768909055/arya-homoeo-hall/o9h4xawtpliqcci1vikm.png"
+  },
+  "programs": {
+    "title": "Specialized Care Programs",
+    "subtitle": "Our expertise in paralysis and polio treatment is backed by generations of clinical experience and thousands of success stories.",
+    "items": [
+      {
+        "id": "paralysis",
+        "slug": "paralysis-recovery-program",
+        "title": "Paralysis Recovery Program",
+        "shortDescription": "Comprehensive treatment focusing on restoring movement and function through natural methods.",
+        "bullets": [
+          "Non-invasive nerve stimulation",
+          "Customized homeopathic remedies",
+          "Muscle strengthening protocols",
+          "Holistic rehabilitation support"
+        ],
+        "iconKey": "paralysis",
+        "sortOrder": 0,
+        "isPublished": true,
+        "createdAt": "2026-01-20T10:14:42.113Z",
+        "updatedAt": "2026-01-20T10:14:42.113Z"
+      },
+      {
+        "id": "polio",
+        "slug": "polio-management",
+        "title": "Polio Management",
+        "shortDescription": "Specialized care for polio patients emphasizing quality of life and functional improvement.",
+        "bullets": [
+          "Post-polio syndrome care",
+          "Muscle atrophy prevention",
+          "Pain management strategies",
+          "Long-term wellness plans"
+        ],
+        "iconKey": "polio",
+        "sortOrder": 0,
+        "isPublished": true,
+        "createdAt": "2026-01-20T10:14:42.113Z",
+        "updatedAt": "2026-01-20T10:14:42.113Z"
+      },
+      {
+        "id": "neural",
+        "slug": "neural-care-wellness",
+        "title": "Neural Care & Wellness",
+        "shortDescription": "Preventive and curative treatments for overall nervous system health and vitality.",
+        "bullets": [
+          "Preventive neurological care",
+          "Chronic pain relief",
+          "Natural immune boosting",
+          "Stress & anxiety management"
+        ],
+        "iconKey": "neural",
+        "sortOrder": 0,
+        "isPublished": true,
+        "createdAt": "2026-01-20T10:14:42.113Z",
+        "updatedAt": "2026-01-20T10:14:42.113Z"
+      }
+    ]
+  },
+  "testimonials": {
+    "title": "Stories of Hope & Healing",
+    "subtitle": "Real patients, real recovery. These testimonials represent the thousands of lives transformed through our natural healing approach.",
+    "items": [
+      {
+        "id": "rk-1",
+        "patientDisplayName": "R.K.",
+        "age": 58,
+        "category": "Paralysis Recovery",
+        "name": "R.K.",
+        "meta": "58 years • Paralysis Recovery",
+        "quote": "After my stroke, I couldn't move my left side. Within 8 months of treatment at Arya Homoeo Hall, I can now walk without support. The care and patience shown by the doctors gave me hope when I had none.",
+        "treatmentDuration": "8 months",
+        "outcomeLabel": "Walking Without Support",
+        "highlight": "Walking Without Support",
+        "order": 1,
+        "isPublished": true,
+        "createdAt": "2026-01-20T10:14:42.113Z",
+        "updatedAt": "2026-01-20T10:14:42.113Z"
+      }
+    ]
+  }
+}

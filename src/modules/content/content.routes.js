@@ -7,6 +7,7 @@ const {
   putContentSection,
   listProgramsPublic,
   listProgramsAdmin,
+  getProgramAdmin,
   createProgram,
   updateProgram,
   deleteProgram,
@@ -22,6 +23,7 @@ const {
   deleteHome,
   listTestimonialsPublic,
   listTestimonialsAdmin,
+  getTestimonialAdmin,
   createTestimonial,
   updateTestimonial,
   deleteTestimonial,
@@ -50,6 +52,7 @@ router.delete('/admin/clinic-profile', requireAdminAuth, requireAdminPermission(
 router.get('/testimonials', listTestimonialsPublic);
 
 router.get('/admin/testimonials', requireAdminAuth, requireAdminPermission('content.manage'), listTestimonialsAdmin);
+router.get('/admin/testimonials/:id', requireAdminAuth, requireAdminPermission('content.manage'), getTestimonialAdmin);
 router.post('/admin/testimonials', requireAdminAuth, requireAdminPermission('content.manage'), createTestimonial);
 router.patch('/admin/testimonials/:id', requireAdminAuth, requireAdminPermission('content.manage'), updateTestimonial);
 router.delete('/admin/testimonials/:id', requireAdminAuth, requireAdminPermission('content.manage'), deleteTestimonial);
@@ -57,6 +60,7 @@ router.delete('/admin/testimonials/:id', requireAdminAuth, requireAdminPermissio
 router.get('/programs', listProgramsPublic);
 
 router.get('/admin/programs', requireAdminAuth, requireAdminPermission('content.manage'), listProgramsAdmin);
+router.get('/admin/programs/:id', requireAdminAuth, requireAdminPermission('content.manage'), getProgramAdmin);
 router.post('/admin/programs', requireAdminAuth, requireAdminPermission('content.manage'), createProgram);
 router.patch('/admin/programs/:id', requireAdminAuth, requireAdminPermission('content.manage'), updateProgram);
 router.delete('/admin/programs/:id', requireAdminAuth, requireAdminPermission('content.manage'), deleteProgram);

@@ -1,5 +1,7 @@
 const crypto = require('crypto');
 
+const bcrypt = require('bcryptjs');
+
 const AdminUser = require('../../models/AdminUser');
 
 function normalizeEmail(email) {
@@ -7,10 +9,9 @@ function normalizeEmail(email) {
 }
 
 function hashPassword(password) {
-  const salt = crypto.randomBytes(16).toString('hex');
-  const iterations = 310000;
-  const hash = crypto.pbkdf2Sync(String(password), salt, iterations, 32, 'sha256').toString('hex');
-  return `pbkdf2_sha256$${iterations}$${salt}$${hash}`;
+  const raw = String(password || '');
+  if (raw.startsWith('$2')) return raw;
+  return bcrypt.hashSync(raw, 12);
 }
 
 function toPublic(user) {
@@ -46,9 +47,11 @@ async function create(payload) {
     email,
     password_hash: hashPassword(payload.password),
     role: payload.role,
+    status: typeof payload.status === 'string' && payload.status ? String(payload.status) : (payload.is_active === false ? 'inactive' : 'active'),
     is_active: typeof payload.is_active === 'boolean' ? payload.is_active : true,
     permissions: payload && payload.permissions && typeof payload.permissions === 'object' ? payload.permissions : {},
     last_login_at: '',
+    token_version: 0,
     created_at: now,
     update_at: now,
   };
@@ -77,15 +80,29 @@ async function patchById(id, patch) {
   }
 
   const now = new Date().toISOString();
+  const shouldBumpTokenVersion =
+    Object.prototype.hasOwnProperty.call(patch || {}, 'password') ||
+    Object.prototype.hasOwnProperty.call(patch || {}, 'role') ||
+    Object.prototype.hasOwnProperty.call(patch || {}, 'is_active') ||
+    Object.prototype.hasOwnProperty.call(patch || {}, 'status');
+
+  const currentTv = typeof current.token_version === 'number' ? current.token_version : 0;
   const next = {
     ...current,
     ...patch,
     email: typeof patch.email !== 'undefined' ? normalizeEmail(patch.email) : current.email,
     password_hash: typeof patch.password !== 'undefined' ? hashPassword(patch.password) : current.password_hash,
+    status:
+      typeof patch.status !== 'undefined' && patch.status
+        ? String(patch.status)
+        : typeof patch.is_active !== 'undefined'
+          ? (patch.is_active === false ? 'inactive' : 'active')
+          : current.status || (current.is_active === false ? 'inactive' : 'active'),
     permissions:
       typeof patch.permissions !== 'undefined' && patch.permissions && typeof patch.permissions === 'object'
         ? patch.permissions
         : current.permissions || {},
+    token_version: shouldBumpTokenVersion ? currentTv + 1 : currentTv,
     update_at: now,
   };
 

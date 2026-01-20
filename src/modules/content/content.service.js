@@ -168,6 +168,7 @@ function normalizeClinicProfile(content) {
 
 function defaultHome() {
   return {
+    heroImageUrl: '',
     hero: {
       titleLines: ['Restoring', 'Movement,', 'Restoring Life'],
       subtitle:
@@ -209,6 +210,7 @@ function normalizeHomeSection(content) {
   const defaults = defaultHome();
 
   const home = base.home && typeof base.home === 'object' ? base.home : {};
+  const heroImageUrl = typeof home.heroImageUrl === 'string' ? home.heroImageUrl : '';
   const hero = home.hero && typeof home.hero === 'object' ? home.hero : {};
   const heroTag = home.heroTag && typeof home.heroTag === 'object' ? home.heroTag : {};
   const legacy = home.legacy && typeof home.legacy === 'object' ? home.legacy : {};
@@ -227,6 +229,7 @@ function normalizeHomeSection(content) {
   return {
     ...base,
     home: {
+      heroImageUrl: heroImageUrl || defaults.heroImageUrl,
       hero: {
         titleLines: Array.isArray(hero.titleLines) && hero.titleLines.length ? hero.titleLines : defaults.hero.titleLines,
         subtitle: typeof hero.subtitle === 'string' && hero.subtitle.length ? hero.subtitle : defaults.hero.subtitle,
@@ -417,6 +420,21 @@ function mergeClinicProfile(existing, input, isPatch) {
 
   const next = isPatch ? { ...current, ...input } : { ...current, ...input };
 
+  const since = typeof next.since === 'string' ? next.since : current.since || '';
+  const establishedYear = typeof next.establishedYear === 'string' ? next.establishedYear : current.establishedYear || '';
+  const establishedYears = typeof next.establishedYears === 'string' ? next.establishedYears : current.establishedYears || '';
+
+  const normalizeLines = (value, fallback) => {
+    if (Array.isArray(value)) {
+      return value.map((v) => String(v || '').trim()).filter(Boolean);
+    }
+    return Array.isArray(fallback) ? fallback : [];
+  };
+
+  const founders = normalizeLines(next.founders, current.founders);
+  const workingDoctors = normalizeLines(next.workingDoctors, current.workingDoctors);
+  const specializations = normalizeLines(next.specializations, current.specializations);
+
   const name = typeof next.name === 'string' ? next.name : current.name || '';
   const tagline = typeof next.tagline === 'string' ? next.tagline : current.tagline || '';
 
@@ -432,6 +450,12 @@ function mergeClinicProfile(existing, input, isPatch) {
     id: next.id || current.id || 'clinic_main',
     name,
     tagline,
+    since,
+    establishedYear,
+    establishedYears,
+    founders,
+    workingDoctors,
+    specializations,
     primaryPhone,
     secondaryPhone,
     phones,
@@ -498,6 +522,7 @@ function mergeHome(existing, input, isPatch) {
   const merged = {
     ...current,
     ...(isPatch ? {} : {}),
+    ...(typeof next.heroImageUrl === 'string' ? { heroImageUrl: next.heroImageUrl } : {}),
     ...(typeof next.hero === 'object' && next.hero ? { hero: { ...(current.hero || {}), ...next.hero } } : {}),
     ...(typeof next.heroTag === 'object' && next.heroTag ? { heroTag: { ...(current.heroTag || {}), ...next.heroTag } } : {}),
     ...(typeof next.legacy === 'object' && next.legacy ? { legacy: { ...(current.legacy || {}), ...next.legacy } } : {}),
@@ -560,6 +585,13 @@ async function listTestimonials({ includeUnpublished }) {
     subtitle: section.subtitle || '',
     items: sortTestimonials(filtered),
   };
+}
+
+async function getTestimonialById(id) {
+  const all = await getAll();
+  const section = all.testimonials || { title: '', subtitle: '', items: [] };
+  const items = Array.isArray(section.items) ? section.items : [];
+  return items.find((t) => String(t && t.id) === String(id)) || undefined;
 }
 
 async function createTestimonial(payload) {
@@ -679,6 +711,13 @@ async function listPrograms({ includeUnpublished }) {
     subtitle: section.subtitle || '',
     items: sortPrograms(filtered),
   };
+}
+
+async function getProgramById(id) {
+  const all = await getAll();
+  const section = all.programs || { title: '', subtitle: '', items: [] };
+  const items = Array.isArray(section.items) ? section.items : [];
+  return items.find((p) => String(p && p.id) === String(id)) || undefined;
 }
 
 async function createProgram(payload) {
@@ -810,6 +849,7 @@ module.exports = {
   patchHome,
   deleteHome,
   listPrograms,
+  getProgramById,
   createProgram,
   updateProgram,
   deleteProgram,
@@ -818,6 +858,7 @@ module.exports = {
   patchClinicProfile,
   deleteClinicProfile,
   listTestimonials,
+  getTestimonialById,
   createTestimonial,
   updateTestimonial,
   deleteTestimonial,

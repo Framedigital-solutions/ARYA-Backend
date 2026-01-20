@@ -33,6 +33,7 @@ const HomeExperienceSchema = z.object({
 
 const HomeUpsertSchema = z.object({
   hero: HomeHeroSchema.optional().default({}),
+  heroImageUrl: z.string().trim().max(5000).optional().default(''),
   heroTag: HomeHeroTagSchema.optional().default({}),
   heroStats: z.array(HomeHeroStatSchema).max(6).optional().default([]),
   legacy: HomeLegacySchema.optional().default({}),

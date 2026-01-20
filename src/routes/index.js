@@ -9,6 +9,9 @@ const adminUsersRoutes = require('../modules/adminUsers/adminUsers.routes');
 const feedbackRoutes = require('../modules/feedback/feedback.routes');
 const notificationsRoutes = require('../modules/notifications/notifications.routes');
 const settingsRoutes = require('../modules/settings/settings.routes');
+const uploadsRoutes = require('../modules/uploads/uploads.routes');
+const careProgramsRoutes = require('../modules/carePrograms/carePrograms.routes');
+const doctorsTimelineRoutes = require('../modules/doctorsTimeline/doctorsTimeline.routes');
 
 const router = express.Router();
 
@@ -21,5 +24,8 @@ router.use('/admin-users', adminUsersRoutes);
 router.use('/feedback', feedbackRoutes);
 router.use('/notifications', notificationsRoutes);
 router.use('/settings', settingsRoutes);
+router.use('/uploads', uploadsRoutes);
+router.use('/care-programs', careProgramsRoutes);
+router.use('/doctors-timeline', doctorsTimelineRoutes);
 
 module.exports = router;

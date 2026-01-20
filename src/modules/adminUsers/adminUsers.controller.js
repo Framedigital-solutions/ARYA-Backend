@@ -2,12 +2,10 @@ const adminUsersService = require('./adminUsers.service');
 const { AdminUserCreateSchema, AdminUserPatchSchema } = require('./adminUsers.validator');
 const { sendError, sendSuccess } = require('../../utils/response');
 
-function isAdmin(req) {
+function isSuperAdmin(req) {
   const role = req && req.admin && req.admin.role ? String(req.admin.role).toLowerCase() : '';
   const isLegacy = Boolean(req && req.admin && req.admin.legacy);
-  const perms = req && req.admin && req.admin.perms && typeof req.admin.perms === 'object' ? req.admin.perms : {};
-  const canManage = Boolean(perms && Object.prototype.hasOwnProperty.call(perms, 'adminUsers.manage') ? perms['adminUsers.manage'] : false);
-  return role === 'admin' || isLegacy || canManage;
+  return role === 'super_admin' || isLegacy;
 }
 
 function isSelf(req, userId) {
@@ -21,7 +19,7 @@ function forbid(res) {
 
 async function listAdminUsers(req, res, next) {
   try {
-    if (!isAdmin(req)) return forbid(res);
+    if (!isSuperAdmin(req)) return forbid(res);
     const data = await adminUsersService.list();
     return sendSuccess(res, { data });
   } catch (err) {
@@ -32,7 +30,7 @@ async function listAdminUsers(req, res, next) {
 async function getAdminUser(req, res, next) {
   try {
     const { id } = req.params;
-    if (!isAdmin(req) && !isSelf(req, id)) return forbid(res);
+    if (!isSuperAdmin(req) && !isSelf(req, id)) return forbid(res);
     const data = await adminUsersService.getById(id);
     if (!data) {
       return sendError(res, { status: 404, message: 'Admin user not found' });
@@ -45,7 +43,7 @@ async function getAdminUser(req, res, next) {
 
 async function createAdminUser(req, res, next) {
   try {
-    if (!isAdmin(req)) return forbid(res);
+    if (!isSuperAdmin(req)) return forbid(res);
     const parsed = AdminUserCreateSchema.safeParse(req.body);
     if (!parsed.success) {
       return sendError(res, { status: 400, message: 'Validation error', error: parsed.error.flatten() });
@@ -64,16 +62,17 @@ async function createAdminUser(req, res, next) {
 async function patchAdminUser(req, res, next) {
   try {
     const { id } = req.params;
-    if (!isAdmin(req) && !isSelf(req, id)) return forbid(res);
+    if (!isSuperAdmin(req) && !isSelf(req, id)) return forbid(res);
     const parsed = AdminUserPatchSchema.safeParse(req.body);
     if (!parsed.success) {
       return sendError(res, { status: 400, message: 'Validation error', error: parsed.error.flatten() });
     }
 
     const payload = parsed.data;
-    if (!isAdmin(req)) {
+    if (!isSuperAdmin(req)) {
       if (payload && Object.prototype.hasOwnProperty.call(payload, 'role')) delete payload.role;
       if (payload && Object.prototype.hasOwnProperty.call(payload, 'is_active')) delete payload.is_active;
+      if (payload && Object.prototype.hasOwnProperty.call(payload, 'status')) delete payload.status;
       if (payload && Object.prototype.hasOwnProperty.call(payload, 'last_login_at')) delete payload.last_login_at;
       if (payload && Object.prototype.hasOwnProperty.call(payload, 'permissions')) delete payload.permissions;
     }
@@ -91,7 +90,7 @@ async function patchAdminUser(req, res, next) {
 async function deleteAdminUser(req, res, next) {
   try {
     const { id } = req.params;
-    if (!isAdmin(req) && !isSelf(req, id)) return forbid(res);
+    if (!isSuperAdmin(req) && !isSelf(req, id)) return forbid(res);
     const removed = await adminUsersService.deleteById(id);
     return sendSuccess(res, { message: 'Admin user deleted', data: removed });
   } catch (err) {

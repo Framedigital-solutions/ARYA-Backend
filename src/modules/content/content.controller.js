@@ -32,6 +32,19 @@ async function listProgramsAdmin(req, res, next) {
   }
 }
 
+async function getProgramAdmin(req, res, next) {
+  try {
+    const { id } = req.params;
+    const data = await contentService.getProgramById(id);
+    if (!data) {
+      return sendError(res, { status: 404, message: 'Program not found' });
+    }
+    return sendSuccess(res, { data });
+  } catch (err) {
+    return next(err);
+  }
+}
+
 async function createProgram(req, res, next) {
   try {
     const parsed = ProgramCreateSchema.safeParse(req.body);
@@ -219,6 +232,19 @@ async function listTestimonialsAdmin(req, res, next) {
   }
 }
 
+async function getTestimonialAdmin(req, res, next) {
+  try {
+    const { id } = req.params;
+    const data = await contentService.getTestimonialById(id);
+    if (!data) {
+      return sendError(res, { status: 404, message: 'Testimonial not found' });
+    }
+    return sendSuccess(res, { data });
+  } catch (err) {
+    return next(err);
+  }
+}
+
 async function createTestimonial(req, res, next) {
   try {
     const parsed = TestimonialCreateSchema.safeParse(req.body);
@@ -316,6 +342,7 @@ module.exports = {
   putContentSection,
   listProgramsPublic,
   listProgramsAdmin,
+  getProgramAdmin,
   createProgram,
   updateProgram,
   deleteProgram,
@@ -331,6 +358,7 @@ module.exports = {
   deleteHome,
   listTestimonialsPublic,
   listTestimonialsAdmin,
+  getTestimonialAdmin,
   createTestimonial,
   updateTestimonial,
   deleteTestimonial,

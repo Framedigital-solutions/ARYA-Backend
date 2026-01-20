@@ -1,6 +1,6 @@
 const { z } = require('zod');
 
-const AdminUserRoleSchema = z.enum(['admin', 'staff']);
+const AdminUserRoleSchema = z.enum(['super_admin', 'admin', 'editor', 'staff']);
 
 const AdminUserPermissionsSchema = z.record(z.boolean()).optional();
 
@@ -11,6 +11,7 @@ const AdminUserCreateSchema = z.object({
   role: AdminUserRoleSchema,
   permissions: AdminUserPermissionsSchema,
   is_active: z.boolean().optional().default(true),
+  status: z.string().trim().max(40).optional().or(z.literal('')),
 });
 
 const AdminUserPatchSchema = z
@@ -21,6 +22,7 @@ const AdminUserPatchSchema = z
     role: AdminUserRoleSchema.optional(),
     permissions: AdminUserPermissionsSchema,
     is_active: z.boolean().optional(),
+    status: z.string().trim().max(40).optional().or(z.literal('')),
     last_login_at: z.string().trim().max(40).optional().or(z.literal('')),
   })
   .strict();
