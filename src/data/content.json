@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-01-20T11:38:25.119Z",
+  "updatedAt": "2026-01-21T08:12:41.733Z",
   "home": {
     "heroImageUrl": "https://res.cloudinary.com/dhlxz1uqf/image/upload/v1768909104/arya-homoeo-hall/z0wrjurffnja16zcysbb.png",
     "hero": {
@@ -55,8 +55,7 @@
     "name": "Arya Homoeo Hall",
     "since": "1985",
     "phones": [
-      "+91 98765 43210",
-      "+91 87654 32109"
+      "9973062638"
     ],
     "email": [
       "info@aryahomoeohall.com",
@@ -70,59 +69,6 @@
       "Mon-Sat: 9:00 AM - 7:00 PM",
       "Sunday: 10:00 AM - 2:00 PM"
     ]
-  },
-  "clinicProfile": {
-    "id": "clinic_main",
-    "name": "Arya Homoeo Hall",
-    "since": "1985",
-    "tagline": "Healing Since 1985",
-    "primaryPhone": "9973062638",
-    "secondaryPhone": "",
-    "whatsappNumber": "",
-    "phones": [
-      "9973062638"
-    ],
-    "emails": [
-      "info@aryahomoeohall.com",
-      "appointments@aryahomoeohall.com"
-    ],
-    "addressText": "123 Heritage Lane, Old City, Mumbai 400001",
-    "address": {
-      "line1": "123 Heritage Lane",
-      "line2": "Old City, Mumbai 400001",
-      "city": "Mumbai",
-      "state": "MH",
-      "pincode": "400001",
-      "country": "IN",
-      "googleMapsUrl": "https://maps.app.goo.gl/x4GCk3Wzo4UemYFt6"
-    },
-    "hoursText": "Mon-Sat: 9:00 AM - 7:00 PM | Sunday: 10:00 AM - 2:00 PM",
-    "hours": [
-      {
-        "label": "Mon-Sat",
-        "open": "09:00",
-        "close": "19:00"
-      },
-      {
-        "label": "Sun",
-        "open": "10:00",
-        "close": "14:00"
-      }
-    ],
-    "googleMapsUrl": "https://maps.app.goo.gl/x4GCk3Wzo4UemYFt6",
-    "updatedAt": "2026-01-20T11:37:36.332Z",
-    "social": {
-      "facebook": "",
-      "instagram": "",
-      "youtube": "",
-      "linkedin": ""
-    },
-    "establishedYear": "",
-    "establishedYears": "",
-    "founders": [],
-    "workingDoctors": [],
-    "specializations": [],
-    "logoUrl": "https://res.cloudinary.com/dhlxz1uqf/image/upload/v1768909055/arya-homoeo-hall/o9h4xawtpliqcci1vikm.png"
   },
   "programs": {
     "title": "Specialized Care Programs",

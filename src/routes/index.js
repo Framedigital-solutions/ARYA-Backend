@@ -12,6 +12,7 @@ const settingsRoutes = require('../modules/settings/settings.routes');
 const uploadsRoutes = require('../modules/uploads/uploads.routes');
 const careProgramsRoutes = require('../modules/carePrograms/carePrograms.routes');
 const doctorsTimelineRoutes = require('../modules/doctorsTimeline/doctorsTimeline.routes');
+const clinicLocationRoutes = require('../modules/clinicLocation/clinicLocation.routes');
 
 const router = express.Router();
 
@@ -27,5 +28,6 @@ router.use('/settings', settingsRoutes);
 router.use('/uploads', uploadsRoutes);
 router.use('/care-programs', careProgramsRoutes);
 router.use('/doctors-timeline', doctorsTimelineRoutes);
+router.use('/clinic-location', clinicLocationRoutes);
 
 module.exports = router;
